@@ -12,7 +12,7 @@ import java.util.List;
  * @author Rich
  */
 public interface GuessTheNumberDao {
-        GameDto add(GameDto guessnumber);
+        GameDto addGame(GameDto guessnumber);
 
     List<GameDto> getAll();
 
