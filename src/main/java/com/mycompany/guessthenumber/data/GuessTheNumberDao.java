@@ -12,7 +12,8 @@ import java.util.List;
  * @author Rich
  */
 public interface GuessTheNumberDao {
-        GameDto add(GameDto guessnumber);
+
+    GameDto addGame(GameDto gamedto);
 
     List<GameDto> getAll();
 
@@ -23,5 +24,5 @@ public interface GuessTheNumberDao {
 
     // true if item exists and is deleted
     boolean deleteById(int id);
-    
+
 }
