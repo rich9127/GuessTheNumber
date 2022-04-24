@@ -15,41 +15,13 @@ statusId INT NOT NULL,
 FOREIGN KEY (statusId) REFERENCES `status`(statusId)
 );
 
-CREATE TABLE `round`(
-roundId INT PRIMARY KEY AUTO_INCREMENT,
-gameId INT NOT NULL,
-FOREIGN KEY (gameId) references game(gameId)
-);
-
-CREATE TABLE gameRound(
-gameId INT NOT NULL,
-roundId INT NOT NULL,
- primary key (gameId, roundId),
-    foreign key fk_gameRound_gameId (gameId)
-		references game(gameId),
-	foreign key fk_gameRound_roundId (roundId)
-		references `round`(roundId)
-);
-
 CREATE TABLE guess(
 guessId INT PRIMARY KEY AUTO_INCREMENT,
 `time` TIMESTAMP NOT NULL,
 userGuess INT NOT NULL,
 result varchar(30) NOT NULL,
-roundId INT NOT NULL
-
--- Foreign key temporarily removed for testing purposes
--- FOREIGN KEY (roundId) REFERENCES `round`(roundId)
-);
-
-CREATE TABLE roundGuess(
-roundId INT NOT NULL,
-guessId INT NOT NULL,
- primary key (roundId, guessId),
-    foreign key fk_roundGuess_roundId (roundId)
-		references `round`(roundId),
-	foreign key fk_roundGuess_guessId (guessId)
-		references guess (guessId)
+gameId INT NOT NULL
+(gameId) REFERENCES game(gameId)
 );
 
 INSERT INTO `status` (StatusName)
