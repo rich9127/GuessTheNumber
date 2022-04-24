@@ -31,7 +31,7 @@ VALUES
     
 INSERT INTO game(answer, statusId)
 VALUES
-	(1234, 1),
+    (1234, 1),
     (2468, 1),
     (3579, 1);
 -- SELECT * FROM game;
