@@ -14,10 +14,11 @@ import java.util.List;
 public class GuessDto {
 
     private int guessId;
-    private int roundId;
+    private int guessNumber;
     private String time;
     private int userGuess;
     private String result;
+    
 
     public int getGuessId() {
         return guessId;
@@ -27,12 +28,12 @@ public class GuessDto {
         this.guessId = guessId;
     }
 
-    public int getRoundId() {
-        return roundId;
+    public int getGuessNumber() {
+        return guessNumber;
     }
 
-    public void setRoundId(int roundId) {
-        this.roundId = roundId;
+    public void setGuessNumber(int guessNumber) {
+        this.guessNumber = guessNumber;
     }
 
     public String getTime() {
