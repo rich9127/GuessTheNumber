@@ -20,7 +20,7 @@ guessId INT PRIMARY KEY AUTO_INCREMENT,
 `time` TIMESTAMP NOT NULL,
 userGuess INT NOT NULL,
 result varchar(30) NOT NULL,
-gameId INT NOT NULL
+gameId INT NOT NULL,
 (gameId) REFERENCES game(gameId)
 );
 
