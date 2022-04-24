@@ -7,8 +7,12 @@ package com.mycompany.guessthenumber.controllers;
 import com.mycompany.guessthenumber.data.GuessTheNumberDao;
 import com.mycompany.guessthenumber.models.GameDto;
 import com.mycompany.guessthenumber.models.GuessDto;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -52,13 +56,14 @@ public class GameController {
 
     @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
-    public GameDto create(@RequestBody GameDto gameDto) {
+    //No @requestbody needed because we are not sending info with request
+    public GameDto create(GameDto gameDto) {
 
         //To be transferred to the service layer --BEGIN
         Random rand = new Random();
         int generatedGuess = rand.nextInt(10000) + 1000;
         gameDto.setAnswer(generatedGuess);
-        gameDto.setStatusName("New Game");
+        gameDto.setStatusId(1);
         //To be transferred to the service layer --END
 
         return dao.addGame(gameDto);
@@ -69,16 +74,14 @@ public class GameController {
         //To be transferred to the service layer --BEGIN
         int correctDigits = 0;
         int correctPlaces = 0;
-        
+
         String userGuessString = Integer.toString(guessDto.getUserGuess());
-        String gameAnswerString = Integer.toString(dao.getGame(gameId).getAnswer());
-        
-        
-       //Will cause error if the user guess is not the correct length
+        String gameAnswerString = Integer.toString(dao.findById(gameId).getAnswer());
+
+        //Will cause error if the user guess is not the correct length
         if (userGuessString.equals(gameAnswerString)) {
             guessDto.setResult("All Correct");
-        } 
-        else {
+        } else {
             for (int i = 0; i < gameAnswerString.length(); i++) {
                 if (userGuessString.charAt(i) == gameAnswerString.charAt(i)) {
                     correctPlaces++;
@@ -90,13 +93,35 @@ public class GameController {
                     }
                 }
             }
-            
+
             guessDto.setResult("Digits: " + correctDigits + " Places: " + correctPlaces);
         }
         //To be transferred to the service layer --END
-        
-       
 
         return dao.submitGuess(guessDto);
     }
+    
+    @GetMapping
+    public List<GameDto> getAll() {
+        return dao.getAll();
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<GameDto> findById(@PathVariable int id) {
+        GameDto result = dao.findById(id);
+        if (result == null) {
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(result);
+    }
+    
+    @GetMapping("rounds/{id}")
+    public ResponseEntity<List<GuessDto>> getAllRounds(@PathVariable int id) {
+        List<GuessDto> result = new ArrayList<>(dao.getAllRounds(id));
+        if (result == null) {
+            return new ResponseEntity(null, HttpStatus.NOT_FOUND);
+        }
+        return ResponseEntity.ok(result);
+    }
+    
 }
