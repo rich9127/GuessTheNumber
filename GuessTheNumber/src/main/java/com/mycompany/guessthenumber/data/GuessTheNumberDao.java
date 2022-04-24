@@ -13,20 +13,17 @@ import java.util.List;
  * @author Rich
  */
 public interface GuessTheNumberDao {
-    GameDto addGame(GameDto gameDtor);
-    
-GameDto getGame(int gameId);
-    
+
+    GameDto addGame(GameDto gameDto);
+
     GuessDto submitGuess(GuessDto guessDto);
 
     List<GameDto> getAll();
 
-    GameDto findById(int id);
+    GameDto findById(int gameId);
 
     // true if item exists and is updated
     boolean update(GameDto guessnumber);
 
-    // true if item exists and is deleted
-    boolean deleteById(int id);
-
+    List<GuessDto> getAllRounds(int gameId);
 }
