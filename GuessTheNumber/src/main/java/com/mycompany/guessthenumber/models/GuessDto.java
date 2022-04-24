@@ -16,7 +16,7 @@ public class GuessDto {
     private int guessId;
     private int roundId;
     private String time;
-    private List<Integer> userGuess = new ArrayList<>();
+    private int userGuess;
     private String result;
 
     public int getGuessId() {
@@ -43,11 +43,11 @@ public class GuessDto {
         this.time = time;
     }
 
-    public List<Integer> getUserGuess() {
+    public int getUserGuess() {
         return userGuess;
     }
 
-    public void setUserGuess(List<Integer> userGuess) {
+    public void setUserGuess(int userGuess) {
         this.userGuess = userGuess;
     }
 
@@ -60,6 +60,7 @@ public class GuessDto {
         this.result = result;
     }
     
+
     
     
 }

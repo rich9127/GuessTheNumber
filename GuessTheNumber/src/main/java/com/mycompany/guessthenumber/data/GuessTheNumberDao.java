@@ -5,6 +5,7 @@
 package com.mycompany.guessthenumber.data;
 
 import com.mycompany.guessthenumber.models.GameDto;
+import com.mycompany.guessthenumber.models.GuessDto;
 import java.util.List;
 
 /**
@@ -12,7 +13,11 @@ import java.util.List;
  * @author Rich
  */
 public interface GuessTheNumberDao {
-        GameDto addGame(GameDto guessnumber);
+    GameDto addGame(GameDto gameDtor);
+    
+GameDto getGame(int gameId);
+    
+    GuessDto submitGuess(GuessDto guessDto);
 
     List<GameDto> getAll();
 
@@ -23,5 +28,5 @@ public interface GuessTheNumberDao {
 
     // true if item exists and is deleted
     boolean deleteById(int id);
-    
+
 }
