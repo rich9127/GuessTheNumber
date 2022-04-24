@@ -11,9 +11,7 @@ package com.mycompany.guessthenumber.models;
 public class GameDto {
 
     private int gameId;
-    private int roundId;
-    private int roundNumber;
-    private String statusName;
+    private int statusId;
     private int answer;
 
     public int getGameId() {
@@ -24,28 +22,12 @@ public class GameDto {
         this.gameId = gameId;
     }
 
-    public int getRoundId() {
-        return roundId;
+    public int getStatusId() {
+        return statusId;
     }
 
-    public void setRoundId(int roundId) {
-        this.roundId = roundId;
-    }
-
-    public int getRoundNumber() {
-        return roundNumber;
-    }
-
-    public void setRoundNumber(int roundNumber) {
-        this.roundNumber = roundNumber;
-    }
-
-    public String getStatusName() {
-        return statusName;
-    }
-
-    public void setStatusName(String statusName) {
-        this.statusName = statusName;
+    public void setStatusId(int statusId) {
+        this.statusId = statusId;
     }
 
     public int getAnswer() {
