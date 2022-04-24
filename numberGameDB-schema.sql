@@ -33,11 +33,13 @@ roundId INT NOT NULL,
 
 CREATE TABLE guess(
 guessId INT PRIMARY KEY AUTO_INCREMENT,
-`time` DATETIME NOT NULL,
+`time` TIMESTAMP NOT NULL,
 userGuess INT NOT NULL,
-result varchar(15) NOT NULL,
-roundId INT NOT NULL,
-FOREIGN KEY (roundId) REFERENCES `round`(roundId)
+result varchar(30) NOT NULL,
+roundId INT NOT NULL
+
+-- Foreign key temporarily removed for testing purposes
+-- FOREIGN KEY (roundId) REFERENCES `round`(roundId)
 );
 
 CREATE TABLE roundGuess(
@@ -60,3 +62,5 @@ VALUES
 	(1234, 1),
     (2468, 1),
     (3579, 1);
+-- SELECT * FROM game;
+-- SELECT * FROM guess;
