@@ -21,7 +21,7 @@ guessId INT PRIMARY KEY AUTO_INCREMENT,
 userGuess INT NOT NULL,
 result varchar(30) NOT NULL,
 gameId INT NOT NULL,
-(gameId) REFERENCES game(gameId)
+FOREIGN KEY (gameId) REFERENCES game(gameId)
 );
 
 INSERT INTO `status` (StatusName)
