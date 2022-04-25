@@ -8,6 +8,7 @@ import com.mycompany.guessthenumber.data.GuessTheNumberDao;
 import com.mycompany.guessthenumber.models.GameDto;
 import com.mycompany.guessthenumber.models.GuessDto;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import org.springframework.http.HttpStatus;
@@ -64,7 +65,7 @@ public class GameController {
         Random rand = new Random();
         StringBuilder builder = new StringBuilder();
         for(int i=0; i<4; i++){
-            Integer temp = rand.nextInt(rand.nextInt(randomArr.size() - 1));
+            Integer temp = rand.nextInt(randomArr.size());
             builder.append(randomArr.get(temp));
             randomArr.remove(temp);
         }
@@ -82,12 +83,13 @@ public class GameController {
         int correctDigits = 0;
         int correctPlaces = 0;
 
-        String userGuessString = Integer.toString(guessDto.getUserGuess());
-        String gameAnswerString = Integer.toString(dao.findById(gameId).getAnswer());
+        String userGuessString = guessDto.getUserGuess();
+        String gameAnswerString = dao.findById(gameId).getAnswer();
 
         //Will cause error if the user guess is not the correct length
         if (userGuessString.equals(gameAnswerString)) {
             guessDto.setResult("All Correct");
+            dao.setGameFinish(gameId);
         } else {
             for (int i = 0; i < gameAnswerString.length(); i++) {
                 if (userGuessString.charAt(i) == gameAnswerString.charAt(i)) {
@@ -101,10 +103,10 @@ public class GameController {
                 }
             }
 
-            guessDto.setResult("Digits: " + correctDigits + " Places: " + correctPlaces);
+            guessDto.setResult("E:" + correctDigits + " P:" + correctPlaces);
         }
         //To be transferred to the service layer --END
-
+        guessDto.setGameId(gameId);
         return dao.submitGuess(guessDto);
     }
     
