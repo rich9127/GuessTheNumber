@@ -56,9 +56,6 @@ public class GameController {
     @GetMapping("/{id}")
     public ResponseEntity<GameDto> findById(@PathVariable int id) {
         GameDto result = service.findById(id);
-        if(result.getStatusId()==1){
-            result.setAnswer("????");
-        }
         if (result == null) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
