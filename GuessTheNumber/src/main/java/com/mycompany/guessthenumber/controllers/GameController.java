@@ -74,7 +74,9 @@ public class GameController {
         gameDto.setStatusId(1);
         //To be transferred to the service layer --END
 
-        return dao.addGame(gameDto);
+        dao.addGame(gameDto);
+        gameDto.setAnswer("????");
+        return gameDto;
     }
 
     @PostMapping("/guess/{gameId}")
@@ -112,12 +114,21 @@ public class GameController {
     
     @GetMapping
     public List<GameDto> getAll() {
-        return dao.getAll();
+        List<GameDto> gameDtoList = dao.getAll();
+        for(GameDto obj : gameDtoList){
+            if(obj.getStatusId() == 1){
+                obj.setAnswer("????");
+            } else {
+                continue;
+            }
+        }
+        return gameDtoList;
     }
     
     @GetMapping("/{id}")
     public ResponseEntity<GameDto> findById(@PathVariable int id) {
         GameDto result = dao.findById(id);
+        result.setAnswer("????");
         if (result == null) {
             return new ResponseEntity(null, HttpStatus.NOT_FOUND);
         }
