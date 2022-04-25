@@ -39,6 +39,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    //Adds a new game to database
     @Override
     public GameDto addGame(GameDto gameDto) {
 
@@ -62,7 +63,8 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         return gameDto;
     }
 
-    //TODO : Update guessNumber to display which guess this is for the gameId the user is guessing for; --Austin
+
+    //Gets a user guess and inserts that guess into database
     @Override
     public GuessDto submitGuess(GuessDto guessDto) {
 
@@ -91,7 +93,6 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
     }
 
     //Retrieves all GameId's and info about the games
-    //TODO: Show answers for only games completed, and amount of guesses for each game
     @Override
     public List<GameDto> getAll() {
         final String sql = "select game.gameId, game.statusId, game.answer from game;";
@@ -99,7 +100,6 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
     }
 
     //Retrieves gameinfo given game Id
-    //TODO: Show answers only if the game is completed, amount of guesses for game
     @Override
     public GameDto findById(int id) {
 
@@ -108,6 +108,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         return jdbcTemplate.queryForObject(sql, new GuessGamerMapper(), id);
     }
 
+    //Sets a game to status id 2 because game is completed
     @Override
     public boolean setGameFinish(int id) {
         final String sql = "UPDATE game SET "
@@ -124,7 +125,8 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
                 + "guess.guessId,\n"
                 + "guess.time,\n"
                 + "guess.userGuess,\n"
-                + "guess.result\n"
+                + "guess.result,\n"
+                + "guess.gameId\n"
                 + "from guess\n"
                 + "where guess.gameId = ?\n"
                 + "order by guess.time DESC;";
@@ -155,6 +157,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
             guessDto.setResult(rs.getString("result"));
             guessDto.setTime(rs.getString("time"));
             guessDto.setUserGuess(rs.getString("userGuess"));
+            guessDto.setGameId(rs.getInt("gameId"));
 
             return guessDto;
         }
