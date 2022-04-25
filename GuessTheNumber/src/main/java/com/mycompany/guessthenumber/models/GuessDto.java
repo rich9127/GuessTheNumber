@@ -14,11 +14,18 @@ import java.util.List;
 public class GuessDto {
 
     private int guessId;
-    private int guessNumber;
     private String time;
-    private int userGuess;
+    private String userGuess;
     private String result;
-    
+    private int gameId;
+
+    public void setGameId(int gameId) {
+        this.gameId = gameId;
+    }
+
+    public int getGameId() {
+        return gameId;
+    }
 
     public int getGuessId() {
         return guessId;
@@ -26,14 +33,6 @@ public class GuessDto {
 
     public void setGuessId(int guessId) {
         this.guessId = guessId;
-    }
-
-    public int getGuessNumber() {
-        return guessNumber;
-    }
-
-    public void setGuessNumber(int guessNumber) {
-        this.guessNumber = guessNumber;
     }
 
     public String getTime() {
@@ -44,11 +43,11 @@ public class GuessDto {
         this.time = time;
     }
 
-    public int getUserGuess() {
+    public String getUserGuess() {
         return userGuess;
     }
 
-    public void setUserGuess(int userGuess) {
+    public void setUserGuess(String userGuess) {
         this.userGuess = userGuess;
     }
 
