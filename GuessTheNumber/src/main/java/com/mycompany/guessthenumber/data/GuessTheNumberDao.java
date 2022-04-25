@@ -23,7 +23,7 @@ public interface GuessTheNumberDao {
     GameDto findById(int gameId);
 
     // true if item exists and is updated
-    boolean update(GameDto guessnumber);
+    boolean setGameFinish(int id);
 
     List<GuessDto> getAllRounds(int gameId);
 }
