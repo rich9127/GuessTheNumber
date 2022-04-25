@@ -100,7 +100,11 @@ public class GameServiceLayerImpl implements GameServiceLayer{
     //Finds a specific game by id
     @Override
     public GameDto findById(int id) {
-        return dao.findById(id);
+        GameDto gameDto = dao.findById(id);
+        if(gameDto.getStatusId()==1){
+            gameDto.setAnswer("????");
+        }
+        return gameDto;
     }
 
     //returns a list of all rounds for a specific game
