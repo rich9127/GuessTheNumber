@@ -43,8 +43,6 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
     public GameDto addGame(GameDto gameDto) {
 
         final String sqlGame = "INSERT INTO game(answer, statusid) VALUES(?,1);";
-        final String sqlRound = "INSERT INTO round(gameId) VALUES(?);";
-        final String sqlGameRound = "INSERT INTO gameRound(gameId, roundId) VALUES(?,?);";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
 
         //Insert new game information into database
@@ -54,7 +52,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
                     sqlGame,
                     Statement.RETURN_GENERATED_KEYS);
 
-            statement.setString(1, Integer.toString(gameDto.getAnswer()));
+            statement.setString(1, gameDto.getAnswer());
             return statement;
 
         }, keyHolder);
@@ -64,7 +62,6 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         return gameDto;
     }
 
-    
     //TODO : Update guessNumber to display which guess this is for the gameId the user is guessing for; --Austin
     @Override
     public GuessDto submitGuess(GuessDto guessDto) {
@@ -73,7 +70,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         Date dt = new Date();
         Timestamp databaseTimestamp = new Timestamp(dt.getTime());
 
-        final String sqlGuess = "INSERT INTO guess (`time`, userGuess, result, roundId)"
+        final String sqlGuess = "INSERT INTO guess (`time`, userGuess, result, gameId)"
                 + " VALUES(?, ?, ?, ?);";;
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update((Connection conn) -> {
@@ -83,13 +80,13 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
                     Statement.RETURN_GENERATED_KEYS);
 
             statement.setTimestamp(1, databaseTimestamp);
-            statement.setString(2, Integer.toString(guessDto.getUserGuess()));
+            statement.setString(2, guessDto.getUserGuess());
             statement.setString(3, guessDto.getResult());
-            statement.setString(4, Integer.toString(guessDto.getGuessId()));
+            statement.setInt(4, guessDto.getGameId());
             return statement;
 
         }, keyHolder);
-
+        guessDto.setTime(databaseTimestamp.toString());
         return guessDto;
     }
 
@@ -97,13 +94,7 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
     //TODO: Show answers for only games completed, and amount of guesses for each game
     @Override
     public List<GameDto> getAll() {
-        final String sql = "select\n"
-                + "game.gameId, \n"
-                + "status.statusName,\n"
-                + "answer\n"
-                + "from game\n"
-                + "join status\n"
-                + "on game.statusId = status.statusId;";
+        final String sql = "select game.gameId, game.statusId, game.answer from game;";
         return jdbcTemplate.query(sql, new GuessGamerMapper());
     }
 
@@ -118,20 +109,11 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
     }
 
     @Override
-    public boolean update(GameDto guessnumber) {
-
-//        final String sql = "UPDATE guessnumber SET "
-//                + "guessnumber = ?, "
-//                + "note = ?, "
-//                + "finished = ? "
-//                + "WHERE id = ?;";
-//
-//        return jdbcTemplate.update(sql,
-//                guessnumber.getTodo(),
-//                guessnumber.getNote(),
-//                guessnumber.isFinished(),
-//                guessnumber.getId()) > 0;
-        return true;
+    public boolean setGameFinish(int id) {
+        final String sql = "UPDATE game SET "
+                + "statusId = 2 "
+                + "WHERE gameId = ?;";
+        return jdbcTemplate.update(sql, id) > 0;
     }
 
     //Gets all rounds that have been played for a given gameId
@@ -141,12 +123,11 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         final String sql = "select \n"
                 + "guess.guessId,\n"
                 + "guess.time,\n"
-                + "guess.guessNumber,\n"
                 + "guess.userGuess,\n"
                 + "guess.result\n"
                 + "from guess\n"
                 + "where guess.gameId = ?\n"
-                + "order by guess.time;";
+                + "order by guess.time DESC;";
 
         return jdbcTemplate.query(sql, new GuessGuessMapper(), gameId);
     }
@@ -158,8 +139,8 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         public GameDto mapRow(ResultSet rs, int index) throws SQLException {
             GameDto gameDto = new GameDto();
             gameDto.setGameId(rs.getInt("gameId"));
+            gameDto.setAnswer(rs.getString("answer"));
             gameDto.setStatusId(rs.getInt("statusId"));
-            gameDto.setAnswer(rs.getInt("answer"));
             return gameDto;
         }
     }
@@ -171,10 +152,9 @@ public class GuessTheNumberDatabaseDao implements GuessTheNumberDao {
         public GuessDto mapRow(ResultSet rs, int i) throws SQLException {
             GuessDto guessDto = new GuessDto();
             guessDto.setGuessId(rs.getInt("guessId"));
-            guessDto.setGuessNumber(rs.getInt("guessNumber"));
             guessDto.setResult(rs.getString("result"));
             guessDto.setTime(rs.getString("time"));
-            guessDto.setUserGuess(rs.getInt("userGuess"));
+            guessDto.setUserGuess(rs.getString("userGuess"));
 
             return guessDto;
         }
