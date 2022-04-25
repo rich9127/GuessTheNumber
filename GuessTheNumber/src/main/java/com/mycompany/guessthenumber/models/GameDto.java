@@ -12,7 +12,7 @@ public class GameDto {
 
     private int gameId;
     private int statusId;
-    private int answer;
+    private String answer;
 
     public int getGameId() {
         return gameId;
@@ -30,11 +30,11 @@ public class GameDto {
         this.statusId = statusId;
     }
 
-    public int getAnswer() {
+    public String getAnswer() {
         return answer;
     }
 
-    public void setAnswer(int answer) {
+    public void setAnswer(String answer) {
         this.answer = answer;
     }
     
