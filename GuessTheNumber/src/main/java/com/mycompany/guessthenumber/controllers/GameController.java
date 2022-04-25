@@ -56,13 +56,20 @@ public class GameController {
 
     @PostMapping("/begin")
     @ResponseStatus(HttpStatus.CREATED)
-    //No @requestbody needed because we are not sending info with request
-    public GameDto create(GameDto gameDto) {
+    public GameDto createGame(GameDto gameDto) {
 
+        List<Integer> randomArr = new ArrayList<>(Arrays.asList(0, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+        
         //To be transferred to the service layer --BEGIN
         Random rand = new Random();
-        int generatedGuess = rand.nextInt(10000) + 1000;
-        gameDto.setAnswer(generatedGuess);
+        StringBuilder builder = new StringBuilder();
+        for(int i=0; i<4; i++){
+            Integer temp = rand.nextInt(rand.nextInt(randomArr.size() - 1));
+            builder.append(randomArr.get(temp));
+            randomArr.remove(temp);
+        }
+       
+        gameDto.setAnswer(builder.toString());
         gameDto.setStatusId(1);
         //To be transferred to the service layer --END
 
